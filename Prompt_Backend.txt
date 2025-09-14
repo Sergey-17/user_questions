@@ -1,0 +1,36 @@
+
+Создай FastAPI-приложение для работы с LLM, использующее ранее написанный модуль "agent.py”.
+
+Структура проекта:
+
+app/
+    main.py
+routers/
+    Ilm.py
+services/
+    agent.py (готовый. просто переносится сюда)
+requirements.txt
+Backend-Dockerfile
+docker-compose.yml
+
+Требования:
+FastAPI-приложение должно запускаться через Uvicorne
+В 'docker-compose.yml" пропиши запуск с командой:
+uvicorn app.maincapp -- host 0.0.0.0 -- port 8000 -- reload
+B 'app/main.py':
+Создай FastAPI-приложение.
+Подключи роутер 'llm.
+B 'app/routers/llm.py:
+Опиши 3 POST ручки:
+'/chat' - вызывает метод 'chat(prompt: str) -> str'.
+'/chat-with-system' - вызывает метод 'chat_with_system(system_prompt: str, user_prompt: str) -> str'.
+'/chat-json' - вызывает метод 'chat_json(system_prompt: str, user_prompt: str, jsonStandard: str) -> dict".
+B 'Dockerfile':
+Используй python:3.11-slim
+Установи зависимости
+Копируй проект в контейнер
+Команда по умолчанию: uvicom app.maircapp -- host 0.0.0.0 -= port 8000 -reload
+B 'docker-compose.yml:
+Описать сервис "backend.
+Построить из текущего Dockerfile.
+Пробросить порт 8000 наружу.
