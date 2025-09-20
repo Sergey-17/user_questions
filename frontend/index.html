@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализатор сайтов</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Анализатор сайтов</h1>
+            <p>Получите детальный анализ любого веб-сайта</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <div class="input-group">
+                    <input 
+                        type="url" 
+                        id="urlInput" 
+                        placeholder="Введите URL сайта (например: https://example.com)"
+                        required
+                    >
+                    <button id="analyzeBtn" class="btn-primary">
+                        <span class="btn-text">Отправить</span>
+                        <span class="btn-loader hidden">
+                            <div class="spinner"></div>
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="results" class="results-section hidden">
+                <h2>Результаты анализа</h2>
+                <div id="resultsContent"></div>
+            </div>
+
+            <div id="error" class="error-section hidden">
+                <div class="error-message">
+                    <h3>Ошибка</h3>
+                    <p id="errorText"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Глобальный лоадер -->
+    <div id="globalLoader" class="global-loader hidden">
+        <div class="loader-content">
+            <div class="spinner large"></div>
+            <p>Анализируем сайт...</p>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

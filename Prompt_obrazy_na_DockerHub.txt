@@ -1,0 +1,11 @@
+Подготовь скрипт для деплоя всего проекта на DockerHub и локально через
+docker compose.
+Условия:
+1. Есть два сервиса: backend и frontend.
+2. Docker Hub (ник: sergey17)
+3. Скрипт дожент содержать следующее:
+    - собирать Docker-образы для backend и frontend.
+    - тегировать их для Docker Hub: 
+      backend -> sergey17/backend:latest, 
+      frontend -> sergey17/frontend:latest.
+    - пушить оба образа в Docker Hub.   

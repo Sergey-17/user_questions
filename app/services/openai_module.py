@@ -112,13 +112,14 @@ class LLMClient:
         except Exception as e:
             raise Exception(f"Ошибка при выполнении запроса с системным промптом: {str(e)}")
     
-    def chat_json(self, system_prompt: str, user_prompt: str) -> dict:
+    def chat_json(self, system_prompt: str, user_prompt: str, json_standard: str = "json") -> dict:
         """
         Запрос к LLM с системным промптом и парсингом ответа в JSON
         
         Args:
             system_prompt (str): Системный промпт
             user_prompt (str): Пользовательский промпт
+            json_standard (str): Стандарт JSON (по умолчанию "json")
             
         Returns:
             dict: Ответ от LLM в виде Python словаря
@@ -146,7 +147,15 @@ class LLMClient:
             
             # Пытаемся распарсить JSON
             try:
-                return json.loads(response_content)
+                # Убираем markdown блоки если есть
+                json_content = response_content.strip()
+                if json_content.startswith("```json"):
+                    json_content = json_content[7:]  # Убираем ```json
+                if json_content.endswith("```"):
+                    json_content = json_content[:-3]  # Убираем ```
+                json_content = json_content.strip()
+                
+                return json.loads(json_content)
             except json.JSONDecodeError:
                 # Если не удалось распарсить JSON, возвращаем как строку
                 return {"response": response_content, "error": "Не удалось распарсить JSON"}
