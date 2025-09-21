@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from app.routers import llm
 from app.services.analyzer import SiteAnalyzer
 import logging
+import os
 
 # Настройка логирования
 logger = logging.getLogger(__name__)
@@ -16,13 +17,16 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="LLM API",
     description="API для работы с языковыми моделями",
-    version="1.0.0"
+    version="1.0.2"
 )
 
 # Настройка CORS для фронтенда
+cors_origins = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
+cors_origins = [origin.strip() for origin in cors_origins if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,7 +45,7 @@ class AnalyzeRequest(BaseModel):
 @app.get("/")
 async def root():
     """Корневой эндпоинт"""
-    return {"message": "LLM API работает!", "version": "1.0.0"}
+    return {"message": "LLM API работает!", "version": app.version}
 
 @app.get("/health")
 async def health_check():

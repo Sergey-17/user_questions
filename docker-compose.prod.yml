@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Backend сервис
+  backend:
+    image: sergey17/backend:latest
+    container_name: backend_prod
+    restart: unless-stopped
+    ports:
+      - "8000:8000"  # Порт для доступа к backend API
+    environment:
+      # Переменные окружения для backend
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    volumes:
+      # Монтируем директорию для логов
+      - ./logs/backend:/app/logs
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend сервис
+  frontend:
+    image: sergey17/frontend:latest
+    container_name: frontend_prod
+    restart: unless-stopped
+    ports:
+      - "5173:5173"  # Порт для доступа к frontend
+    environment:
+      # Переменные окружения для frontend
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_APP_TITLE=${VITE_APP_TITLE}
+    volumes:
+      # Монтируем директорию для логов
+      - ./logs/frontend:/app/logs
+    networks:
+      - app_network
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Общая сеть для взаимодействия между сервисами
+networks:
+  app_network:
+    driver: bridge
+    name: app_production_network
+
+# Volumes для постоянного хранения данных
+volumes:
+  backend_logs:
+    driver: local
+  frontend_logs:
+    driver: local
